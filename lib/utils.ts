@@ -1,4 +1,3 @@
-import { PrismaClient } from "@prisma/client";
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 
@@ -13,12 +12,3 @@ export const handleError = (error: unknown) => {
     return { errorMessage: "An error occurred" };
   }
 }
-
-declare global {
-  var Prisma: PrismaClient
-}
-
-const Prisma = globalThis.Prisma || new PrismaClient();
-if (process.env.NODE_ENV !== "production") globalThis.Prisma = Prisma;
-
-export default Prisma;
