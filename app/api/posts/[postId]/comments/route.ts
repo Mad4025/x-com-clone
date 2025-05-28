@@ -15,11 +15,11 @@ export async function POST(req: NextRequest, { params }: RouteContext) {
     try {
         const { text } = await req.json();
         if (!text.trim() || typeof text !== 'string') {
-            return NextResponse.json({ error: 'Input cannot be empty' }, { status: 400 });
+            return NextResponse.json({ error: 'Error' });
         }
 
         const postExists = await prisma.post.findUnique({ where: { id: postId } });
-        if (!postExists) return NextResponse.json({ error: 'Post not found' }, { status: 404 });
+        if (!postExists) return NextResponse.json({ error: 'Error' });
 
         const newComment = await prisma.comment.create({
             data: { text: text.trim(), authorId: user.id, postId: postId },
@@ -27,7 +27,6 @@ export async function POST(req: NextRequest, { params }: RouteContext) {
         });
         return NextResponse.json(newComment, { status: 201 });
     } catch (error: any) {
-        console.error(`Error creating comment for post ${postId}:`, error);
-        return NextResponse.json({ error: `Failed to create comment: ${error.message}` }, { status: 500 });
+        return NextResponse.json({ error: error });
     }
 }

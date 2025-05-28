@@ -10,7 +10,7 @@ import { Session } from '@supabase/supabase-js';
 import { createBrowserClient } from '@supabase/ssr';
 import Link from 'next/link';
 
-import { EnrichedPost, Comment as CommentType, Interaction as InteractionData } from '@/app/types';
+import { Comment, EnrichedPost, Interaction as InteractionData } from '@/app/types';
 import { PostItem } from '@/components/PostItem';
 import { toast } from 'sonner';
 import { Textarea } from '@/components/ui/textarea';
@@ -123,7 +123,7 @@ function HomePage() {
     ));
   };
 
-  const handleCommentAdded = (postId: string, newComment: CommentType) => {
+  const handleCommentAdded = (postId: string, newComment: Comment) => {
     setPosts(prevPosts => prevPosts.map(p => {
       if (p.id === postId) {
         const existingComments = p.comments || [];

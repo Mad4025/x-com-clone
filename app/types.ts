@@ -5,16 +5,6 @@ export interface Author {
     email: string;
 }
 
-export interface Comment {
-    id: string;
-    text: string;
-    createdAt: string;
-    updatedAt: string;
-    author: Author;
-    authorId: string;
-    postId: string;
-}
-
 export interface Interaction {
     userId: string;
     type: PrismaInteractionType;
@@ -28,6 +18,16 @@ export interface EnrichedPost {
     updatedAt: string;
     authorId: string;
     author: Author;
-    comments: Comment[];
     interactions: Interaction[];
+    comments: Comment[];
+}
+
+export interface Comment {
+    id: string;
+    text: string;
+    createdAt: string;
+    updatedAt: string;
+    author: Author;
+    authorId: string;
+    postId: string;
 }

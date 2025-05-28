@@ -1,5 +1,4 @@
 import { prisma } from "@/lib/prisma";
-import { createClient } from "@/utils/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 import { createClient as createSupabaseJsClient } from "@supabase/supabase-js";
 import { getAuthenticatedUser } from "@/lib/server-utils";
@@ -73,8 +72,8 @@ export async function POST(req: NextRequest) {
             },
             include: {
                 author: { select: { id: true, email: true } },
-                comments: true,
                 interactions: true,
+                comments: true,
             }
         });
         return NextResponse.json(newPost, { status: 201 });

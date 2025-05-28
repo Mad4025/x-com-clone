@@ -27,8 +27,8 @@ export async function PUT(req: NextRequest, { params }: RouteContext) {
             data: { text: text.trim(), updatedAt: new Date() },
             include: {
                 author: { select: { id: true, email: true } },
-                comments: { include: { author: { select: { id: true, email: true } } }, 
-                orderBy: { createdAt: 'asc' } }, 
+                comments: { include: { author: { select: { id: true, email: true } } },
+                orderBy: { createdAt: 'asc' } },
                 interactions: { select: { userId: true, type: true } },
             }
         });

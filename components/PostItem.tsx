@@ -1,6 +1,6 @@
 'use client';
 
-import { Comment as CommentType, EnrichedPost, Interaction as InteractionData } from "@/app/types";
+import { Comment, EnrichedPost, Interaction as InteractionData } from "@/app/types";
 import { InteractionType } from "@prisma/client";
 import { Session } from "@supabase/supabase-js";
 import axios, { AxiosError } from "axios";
@@ -9,9 +9,9 @@ import { toast } from "sonner";
 import { Card, CardContent, CardFooter, CardHeader } from "./ui/card";
 import { Button } from "./ui/button";
 import { Edit3, Loader2, MessageSquare, Send, ThumbsDown, ThumbsUp, Trash2, XCircle } from "lucide-react";
-import { Input } from "./ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Textarea } from "./ui/textarea";
+import { Input } from "./ui/input";
 
 interface PostItemProps {
     post: EnrichedPost;
@@ -19,7 +19,7 @@ interface PostItemProps {
     onPostUpdate: (updatedPost: EnrichedPost) => void;
     onPostDelete: (postId: string) => void;
     onInteractionUpdate: (postId: string, newInteractions: InteractionData[]) => void;
-    onCommentAdded: (postId: string, newComment: CommentType) => void;
+    onCommentAdded: (postId: string, newComment: Comment) => void;
 }
 
 export function PostItem({
@@ -27,11 +27,11 @@ export function PostItem({
 }: PostItemProps) {
     const [isEditing, setIsEditing] = useState(false);
     const [editedText, setEditedText] = useState(post.text || '');
-    const [commentText, setCommentText] = useState('');
-    const [showComments, setShowComments] = useState(false);
     const [isLoading, setIsLoading] = useState({
         edit: false, delete: false, interact: false, comment: false
     });
+    const [showComments, setShowComments] = useState(false);
+    const [commentText, setCommentText] = useState('');
 
     const currentUserId = currentUserSession?.user?.id;
     const isAuthor = post.authorId === currentUserId;
@@ -102,18 +102,18 @@ export function PostItem({
     };
 
     const handleCommentSubmit = (e: FormEvent) => {
-        e.preventDefault();
-        if (!commentText.trim() || !currentUserSession) return;
-        handleApiCall('comment', async () => {
-            const response = await axios.post(`/api/posts/${post.id}/comments`,
-                { text: commentText },
-                { headers: { Authorization: `Bearer ${currentUserSession.access_token}` } 
-            });
-            onCommentAdded(post.id, response.data);
-            setCommentText('');
-            toast.success('Comment added!');
-            if (!showComments) setShowComments(true);
+      e.preventDefault();
+      if (!commentText || !currentUserSession) return;
+      handleApiCall('comment', async () => {
+        const response = await axios.post(`/api/posts/${post.id}/comments`,
+          { text: commentText },
+          { headers: { Authorization: `Bearer ${currentUserSession.access_token}` } 
         });
+        onCommentAdded(post.id, response.data);
+        setCommentText('');
+        toast.success('Comment added!');
+        if (!showComments) setShowComments(true);
+      });
     };
 
     return (
