@@ -27,7 +27,7 @@ Basic knowledge of TypeScript and Next.js
 
 #### Clone the Repository:
 ```Bash
-git clone [https://github.com/Mad4025/x-com-clone]
+git clone https://github.com/Mad4025/x-com-clone
 cd x-platform-clone
 ```
 
